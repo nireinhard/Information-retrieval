@@ -21,8 +21,7 @@ public class Document {
     }
 
     private void fillContent(String string){
-        string = string.replaceAll("\\<[^>]*>","").replaceAll("regex für alle nicht alphanumerischen"," ");
-
+        string = string.replaceAll("\\<[^>]*>","").replaceAll("[^a-zA-Z0-9 -]"," ").toLowerCase();
 
     }
 
