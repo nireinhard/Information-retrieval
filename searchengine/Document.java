@@ -7,7 +7,7 @@ public class Document {
     private long id;
     private String title;
     private String url;
-    private String[] content = new String[1];
+    private String[] content;
 
     public Document(){
 
@@ -17,12 +17,21 @@ public class Document {
         id = ++counter;
         title = nytDoc.getHeadline();
         url = nytDoc.getUrl().toString();
-        fillContent(nytDoc.getBody());
+        content = getDocumentContent(nytDoc.getBody());
     }
 
-    private void fillContent(String string){
-        string = string.replaceAll("\\<[^>]*>","").replaceAll("[^a-zA-Z0-9 -]"," ").toLowerCase();
-
+    /**
+     * [^a-zA-Z0-9] replaces all non alphanumerical characters with a blank
+     * ( )\1{1,} replaces all following occurences of a blank with one blank
+     */
+    private String[] getDocumentContent(String string){
+        if (string == null) return null;
+        if(!string.isEmpty()){
+            string = string.replaceAll("\\<[^>]*>","").replaceAll("[^a-zA-Z0-9]"," ").replaceAll("( )\\1{1,}", " ").toLowerCase();
+            String[] tmp = string.split(" ");
+            return tmp;
+        }
+        return null;
     }
 
     public long getId() {

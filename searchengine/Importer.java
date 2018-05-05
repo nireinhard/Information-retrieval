@@ -1,13 +1,16 @@
 package searchengine;
 
-import searchengine.parser.NYTCorpusDocument;
-import searchengine.parser.NYTCorpusDocumentParser;
 import searchengine.parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Importer {
+
+    static List<Document> parsedDocuments = new LinkedList<Document>();
+    static Parser parser = new Parser();
 
     static void importData(File file) throws IOException {
         if(!file.exists())throw new IOException("Datei existiert nicht!");
@@ -22,8 +25,19 @@ public class Importer {
         String name = file.getName();
         String ext = name.substring(name.lastIndexOf(".")+1);
         if (ext.equals("xml")){
-            System.out.printf("%-20s %s%10d\n", name,new Parser().parse(file).getId(), file.length());
+            Document doc = parser.parseAndStemm(file);
+            parsedDocuments.add(doc);
+            debugStdoutLog(doc);
         }
+    }
 
+    private static void debugStdoutLog(Document doc){
+        System.out.println("STEMMED DOC BEGIN: " + doc.getTitle() + "\n");
+        for (int i=0; i<doc.getContent().length; i++){
+            StringBuilder sb = new StringBuilder();
+            sb.append(doc.getContent()[i]).append(" ");
+            System.out.print(sb.toString());
+        }
+        System.out.println("\n\nSTEMMED DOC END\n");
     }
 }
