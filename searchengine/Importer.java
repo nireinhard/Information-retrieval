@@ -1,9 +1,11 @@
 package searchengine;
 
+import searchengine.database.Database;
 import searchengine.parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,17 +29,24 @@ public class Importer {
         if (ext.equals("xml")){
             Document doc = parser.parseAndStemm(file);
             parsedDocuments.add(doc);
+            try {
+                Database.insert(doc);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             debugStdoutLog(doc);
         }
     }
 
     private static void debugStdoutLog(Document doc){
-        System.out.println("STEMMED DOC BEGIN: " + doc.getTitle() + "\n");
-        for (int i=0; i<doc.getContent().length; i++){
-            StringBuilder sb = new StringBuilder();
-            sb.append(doc.getContent()[i]).append(" ");
-            System.out.print(sb.toString());
+        if (doc.getContent() != null){
+            System.out.println("STEMMED DOC BEGIN: " + doc.getTitle() + "\n");
+            for (int i=0; i<doc.getContent().length; i++){
+                StringBuilder sb = new StringBuilder();
+                sb.append(doc.getContent()[i]).append(" ");
+                System.out.print(sb.toString());
+            }
+            System.out.println("\n\nSTEMMED DOC END\n");
         }
-        System.out.println("\n\nSTEMMED DOC END\n");
     }
 }

@@ -2,6 +2,11 @@ package searchengine;
 
 import searchengine.parser.NYTCorpusDocument;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class Document {
     private static int counter = 0;
     private long id;
@@ -32,6 +37,16 @@ public class Document {
             return tmp;
         }
         return null;
+    }
+
+    public Map<String, Long> contentFrequency(){
+        if(content != null){
+            return Arrays.asList(content).stream().collect(Collectors.groupingBy(e -> e.toString().toLowerCase(),Collectors.counting()));
+        }else{
+            Map<String, Long> emptyMap = new HashMap<String, Long>();
+            return emptyMap;
+        }
+
     }
 
     public long getId() {
