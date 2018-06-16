@@ -1,10 +1,14 @@
 package searchengine.database;
 
 import searchengine.Document;
+import searchengine.Posting;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,6 +55,42 @@ public class Database {
             pstmtTfs.addBatch();
         }
 
+    }
+
+    public static void fillPostings(List<Posting> postings, String term) throws SQLException {
+        String sql = "Select did, tf From tfs Where term = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, term);
+        ResultSet rSet = pst.executeQuery();
+        do {
+            postings.add(new Posting(rSet.getLong("did"), rSet.getInt("tf")));
+        } while (rSet.next());
+    }
+
+    public static int getDF(String term) throws SQLException {
+        String sql = "Select df From dfs Where term = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, term);
+        ResultSet rSet = pst.executeQuery();
+        if (rSet.first()) return rSet.getInt("df");
+        return 0;
+    }
+
+    public static int getSize() throws SQLException {
+        String sql = "Select size From d";
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rSet = pst.executeQuery();
+        if (rSet.first()) return rSet.getInt("df");
+        return 0;
+    }
+
+    public static int getLen(long did) throws SQLException {
+        String sql = "Select len From dls Where did = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setLong(1, did);
+        ResultSet rSet = pst.executeQuery();
+        if (rSet.first()) return rSet.getInt("df");
+        return 0;
     }
 
     public static void close() throws SQLException {
