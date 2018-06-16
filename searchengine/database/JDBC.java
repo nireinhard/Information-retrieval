@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class JDBC {
 
     private static String DB_URL_ENV = System.getenv("DB_URL");
-    private static String DB_URL = "jdbc:sqlite:/Users/XXX/nyt.sqlite";
+    private static String DB_URL = "jdbc:sqlite:/Users/niklasreinhard/Downloads/nyt.sqlite";
     private static String DB_USER = "root";
     private static String DB_PASSWD = "";
 

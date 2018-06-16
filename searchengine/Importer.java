@@ -1,11 +1,9 @@
 package searchengine;
 
-import searchengine.database.Database;
 import searchengine.parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,11 +27,11 @@ public class Importer {
         if (ext.equals("xml")){
             Document doc = parser.parseAndStemm(file);
             parsedDocuments.add(doc);
-            try {
+            /*try {
                 Database.insert(doc);
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
+            }*/
             debugStdoutLog(doc);
         }
     }
